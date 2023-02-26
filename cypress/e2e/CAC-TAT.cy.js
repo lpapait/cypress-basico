@@ -32,6 +32,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
             .type('texte')
             .should('have.value', '')
     })
+
     it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
         cy.get('#phone-checkbox').check().should('be.checked')
         cy.get('.button[type="submit"]').click()
@@ -65,8 +66,15 @@ describe('Central de Atendimento ao Cliente TAT', () => {
             .clear('')
             .should('have.value', '')
     })
+
     it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', ()=> {
         cy.get('.button[type="submit"]').click()
         cy.get('.error').should('be.visible')
     })
+
+    it('envia o formuário com sucesso usando um comando customizado', ()=> {
+        cy.fillMandatoryFieldsAndSubmit()
+        cy.get('.success').should('be.visible')
+    })
+
 })
