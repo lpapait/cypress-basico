@@ -10,21 +10,40 @@ describe('Central de Atendimento ao Cliente TAT', () => {
 
     it('Preenche os campos obrigatórios e envia o formulário', () => {
         const longText = 'Pignut hamburg parsley tigernut.,Pignut hamburg parsley tigernut.,Pignut hamburg parsley tigernut.'
-        cy.get('#firstName').click().type('Lucas')
-        cy.get('#lastName').click().type('Papait Desiderio')
-        cy.get('#email').click().type('lucas@papait.com')
-        cy.get('#open-text-area').click().type(longText, { delay: 0 })
+        cy.get('#firstName')
+            .click()
+            .type('Lucas')
+        cy.get('#lastName')
+            .click()
+            .type('Papait Desiderio')
+        cy.get('#email')
+            .click()
+            .type('lucas@papait.com')
+        cy.get('#open-text-area')
+            .click()
+            .type(longText, { delay: 0 })
         cy.contains('button', 'Enviar').click()
-        cy.get('.success').should('be.visible')
+        cy.get('.success')
+            .should('be.visible')
     })
 
     it('Exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', () => {
-        cy.get('#firstName').click().type('Lucas')
-        cy.get('#lastName').click().type('Papait Desiderio')
-        cy.get('#email').click().type('lucas@papait,com')
-        cy.get('#open-text-area').click().type('teste')
-        cy.contains('button', 'Enviar').click()
-        cy.get('.error').should('be.visible')
+        cy.get('#firstName')
+            .click()
+            .type('Lucas')
+        cy.get('#lastName')
+            .click()
+            .type('Papait Desiderio')
+        cy.get('#email')
+            .click()
+            .type('lucas@papait,com')
+        cy.get('#open-text-area')
+            .click()
+            .type('teste')
+        cy.contains('button', 'Enviar')
+            .click()
+        cy.get('.error')
+            .should('be.visible')
     })
 
     it('Campo númerico continua vazio inserindo valor não-numéricos', () => {
@@ -34,9 +53,13 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     })
 
     it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
-        cy.get('#phone-checkbox').check().should('be.checked')
-        cy.contains('button', 'Enviar').click()
-        cy.get('.error').should('be.visible')
+        cy.get('#phone-checkbox')
+            .check()
+            .should('be.checked')
+        cy.contains('button', 'Enviar')
+            .click()
+        cy.get('.error')
+            .should('be.visible')
 
     })
 
@@ -67,25 +90,48 @@ describe('Central de Atendimento ao Cliente TAT', () => {
             .should('have.value', '')
     })
 
-    it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', ()=> {
-        cy.contains('button', 'Enviar').click()
-        cy.get('.error').should('be.visible')
+    it('exibe mensagem de erro ao submeter o formulário sem preencher os campos obrigatórios', () => {
+        cy.contains('button', 'Enviar')
+            .click()
+        cy.get('.error')
+            .should('be.visible')
     })
 
-    it('envia o formuário com sucesso usando um comando customizado', ()=> {
+    it('envia o formuário com sucesso usando um comando customizado', () => {
         cy.fillMandatoryFieldsAndSubmit()
-        cy.get('.success').should('be.visible')
+        cy.get('.success')
+            .should('be.visible')
     })
 
-    it('seleciona um produto (YouTube) por seu texto', ()=>{
-        cy.get('#product').select('YouTube').should('have.value', 'youtube')
+    it('seleciona um produto (YouTube) por seu texto', () => {
+        cy.get('#product')
+            .select('YouTube')
+            .should('have.value', 'youtube')
     })
 
-    it('seleciona um produto (Mentoria) por seu valor (value)', ()=>{
-        cy.get('#product').select('mentoria').should('have.value', 'mentoria')
+    it('seleciona um produto (Mentoria) por seu valor (value)', () => {
+        cy.get('#product')
+            .select('mentoria')
+            .should('have.value', 'mentoria')
     })
 
-    it('seleciona um produto (Blog) por seu índice', ()=>{
-        cy.get('#product').select(1).should('have.value', 'blog')
+    it('seleciona um produto (Blog) por seu índice', () => {
+        cy.get('#product')
+            .select(1)
+            .should('have.value', 'blog')
+    })
+
+    it('Marca o tipo de atendimento "Feedback"', () => {
+        cy.get('input[type="radio"][value="feedback"]')
+            .check()
+            .should('have.value', 'feedback')
+    })
+    it.only('marca cada tipo de atendimento', ()=>{
+        cy.get('input[type="radio"]')
+        .should('have.length', 3)
+        .each(($radio) => {
+            cy.wrap($radio).check()
+            cy.wrap($radio).should('be.checked')
+        })
     })
 })
