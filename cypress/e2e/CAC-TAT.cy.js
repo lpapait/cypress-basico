@@ -21,7 +21,9 @@ describe('Central de Atendimento ao Cliente TAT', () => {
             .type('lucas@papait.com')
         cy.get('#open-text-area')
             .click()
-            .type(longText, { delay: 0 })
+            .type(longText, {
+                delay: 0
+            })
         cy.contains('button', 'Enviar').click()
         cy.get('.success')
             .should('be.visible')
@@ -127,50 +129,92 @@ describe('Central de Atendimento ao Cliente TAT', () => {
             .should('have.value', 'feedback')
     })
 
-    it('marca cada tipo de atendimento', ()=>{
+    it('marca cada tipo de atendimento', () => {
         cy.get('input[type="radio"]')
-        .should('have.length', 3)
-        .each(($radio) => {
-            cy.wrap($radio).check()
-            cy.wrap($radio).should('be.checked')
-        })
+            .should('have.length', 3)
+            .each(($radio) => {
+                cy.wrap($radio).check()
+                cy.wrap($radio).should('be.checked')
+            })
     })
 
-    it('marca ambos checkboxes, depois desmarca o último', ()=>{
+    it('marca ambos checkboxes, depois desmarca o último', () => {
         cy.get('input[type="checkbox"]')
-        .check()
-        .last()
-        .uncheck()
-        .should('not.be.checked')
+            .check()
+            .last()
+            .uncheck()
+            .should('not.be.checked')
     })
 
-    it('seleciona um arquivo da pasta fixtures', ()=> {
+    it('seleciona um arquivo da pasta fixtures', () => {
         cy.get('input[type="file"]')
-        .should('not.have.value')
-        .selectFile('cypress/fixtures/example.json')
-        .should(($input)=> {
-            console.log($input)
-            expect($input[0].files[0].name).to.equal('example.json')
-        })
+            .should('not.have.value')
+            .selectFile('cypress/fixtures/example.json')
+            .should(($input) => {
+                console.log($input)
+                expect($input[0].files[0].name).to.equal('example.json')
+            })
     })
 
-    it('seleciona um arquivo da pasta fixtures', ()=> {
+    it('seleciona um arquivo da pasta fixtures', () => {
         cy.get('input[type="file"]')
-        .should('not.have.value')
-        .selectFile('cypress/fixtures/example.json' , {action: 'drag-drop'})
-        .should(($input)=> {
-            console.log($input)
-            expect($input[0].files[0].name).to.equal('example.json')
-        })
+            .should('not.have.value')
+            .selectFile('cypress/fixtures/example.json', {
+                action: 'drag-drop'
+            })
+            .should(($input) => {
+                console.log($input)
+                expect($input[0].files[0].name).to.equal('example.json')
+            })
     })
 
-    it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', ()=> {
-       cy.fixture('example.jason').as('sampleFile') 
-       cy.get('input[type="file"]')
-       selectFile('@sampleFile')
-       .should(($input)=> {
-        console.log($input)
-        expect($input[0].files[0].name).to.equal('example.json')
+    it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', () => {
+        cy.fixture('example.jason').as('sampleFile')
+        cy.get('input[type="file"]')
+            .selectFile('@sampleFile')
+            .should(($input) => {
+                console.log($input)
+                expect($input[0].files[0].name).to.equal('example.json')
+            })
     })
+
+    it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
+        cy.get('#privacy a')
+            .should('have.attr', 'target', '_blank')
+    })
+
+    it.only('acessa a página da política de privacidade removendo o target e então clicanco no link', () => {
+        cy.get('#privacy a')
+            .invoke('removeAttr', 'target')
+            .click()
+        cy.contains('CAC TAT - Política de privacidade')
+            .should('be.visible')
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    it.only('Encontre o gato escondido', ()=> {
+       cy.get('#cat')
+       .invoke('show')
+       .should('be.visible') 
     })
 })
