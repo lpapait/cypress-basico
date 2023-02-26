@@ -135,7 +135,8 @@ describe('Central de Atendimento ao Cliente TAT', () => {
             cy.wrap($radio).should('be.checked')
         })
     })
-    it.only('marca ambos checkboxes, depois desmarca o último', ()=>{
+
+    it('marca ambos checkboxes, depois desmarca o último', ()=>{
         cy.get('input[type="checkbox"]')
         .check()
         .last()
@@ -143,4 +144,33 @@ describe('Central de Atendimento ao Cliente TAT', () => {
         .should('not.be.checked')
     })
 
+    it('seleciona um arquivo da pasta fixtures', ()=> {
+        cy.get('input[type="file"]')
+        .should('not.have.value')
+        .selectFile('cypress/fixtures/example.json')
+        .should(($input)=> {
+            console.log($input)
+            expect($input[0].files[0].name).to.equal('example.json')
+        })
+    })
+
+    it('seleciona um arquivo da pasta fixtures', ()=> {
+        cy.get('input[type="file"]')
+        .should('not.have.value')
+        .selectFile('cypress/fixtures/example.json' , {action: 'drag-drop'})
+        .should(($input)=> {
+            console.log($input)
+            expect($input[0].files[0].name).to.equal('example.json')
+        })
+    })
+
+    it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', ()=> {
+       cy.fixture('example.jason').as('sampleFile') 
+       cy.get('input[type="file"]')
+       selectFile('@sampleFile')
+       .should(($input)=> {
+        console.log($input)
+        expect($input[0].files[0].name).to.equal('example.json')
+    })
+    })
 })
